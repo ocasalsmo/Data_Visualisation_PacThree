@@ -1,0 +1,164 @@
+body, html{
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 
+             "Segoe UI", Roboto, Helvetica, Arial, 
+             sans-serif;
+}
+
+.WholeBody{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
+}
+
+#content{
+    flex: 7;
+    padding: 2%;
+    text-align: center;
+
+    background-color: #E6F2E6;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+
+    gap: 4vh;
+
+    color: #2B2B2B;
+}
+
+#eventInformation{
+    flex: 3;
+    background-color: #F7E6EA;
+    padding: 2%;
+    text-align: center;
+}
+
+.slider-container {
+  width: 80%;          /* fills parent */
+  margin: auto;
+}
+
+.month-slider {
+  width: 100%;
+  margin: 0;
+  accent-color: #4a90e2;
+}
+
+datalist {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0;
+}
+
+datalist option {
+  font-size: 12px;
+  transform: translateX(-50%);
+}
+
+/* Align first and last labels properly */
+datalist option:first-child {
+  transform: translateX(0);
+}
+
+datalist option:last-child {
+  transform: translateX(-100%);
+}
+
+.PlotCont{
+  width: 96%;
+  display: flex;
+  flex-direction: column;
+  gap: 2vh;
+}
+
+.SliderContainerButtons{
+    width: 96%;
+    display: flex;
+    align-items: center;
+
+
+}
+
+#YearShown{
+  margin: 0;
+  
+}
+
+#EventDescription{
+  margin: auto;
+  color: #2B2B2B;
+}
+
+hr{
+  background-color: black;
+  width: 96%;
+  height: 1vh;
+  border-style: solid;
+  border-color: black;
+  margin: 0;
+}
+
+.PlotCont, .SliderContainerButtons{
+  background-color: white;
+  padding: 2%;
+  border-style: solid;
+  border-color: #1F3D1F;
+}
+
+h1{
+  margin-bottom: 0;
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-size: 4vh;
+}
+
+#InstructionsDiv{
+  display: none;
+  background-color: #FFF6DB;
+  width: 60%;
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  text-align: center;
+  transform: translate(20%, 40%);
+  padding: 1%;
+  border-style: solid;
+  border-color: black;
+}
+
+#InstructionsDiv div{
+  padding: 2%;
+  text-align: center;
+}
+
+#InstructionsDiv h2, #InstructionsDiv p{
+  margin: auto;
+  margin-top: 2vh;
+}
+
+#InstructionsDiv button{
+  margin: 0;
+}
+
+button{
+  background-color: #E6F2E6;
+  color: #1F3D1F;
+
+  border-style: solid;
+  border-color: #1F3D1F;
+}
+
+button:hover{
+  background-color: #CDE6CD;
+}
+
+.InstructionsButton{
+  background: #FFFFFF;
+  color: #1F3D1F;
+  border: 1px dashed #A3D1A3;
+}

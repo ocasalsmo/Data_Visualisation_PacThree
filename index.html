@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="style.css">
+
+    <title>Hotel Bookings</title>
+
+    <script src="https://cdn.plot.ly/plotly-3.3.0.min.js" charset="utf-8"></script>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/1.0.21/jquery.csv.min.js"></script>
+
+    <script src="arraysData.js"></script>
+    <script src="functions.js"></script>
+    <script src="init.js"></script>
+
+</head>
+<body>
+    <div class="WholeBody">
+
+    <div id="content">
+        
+        <h1>Hotel Bookings Overview in Portugal</h1>
+
+        <button onclick="showInstructions()" class="InstructionsButton">How to use this plot</button>
+        <!--<h2 id="YearShown">Year 2015</h2>-->
+
+        <div class="PlotCont">
+
+            <div id="Barplot_Non_Cancelled_Bookings">
+
+            </div>
+            
+
+        </div>
+
+        <!-- Slider to select month -->
+        <div class="SliderContainerButtons">
+                <button onclick="decreaseYear()">&#8678 <br> Previous Year</button>
+
+                <div class="slider-container">
+                    <input
+                            id="monthSlider"
+                            type="range"
+                            min="1"
+                            max="12"
+                            step="1"
+                            value="7"
+                            list="months"
+                            class="month-slider"
+                    >
+
+                    <datalist id="months">
+                            <option value="1" label="Jan"></option>
+                            <option value="2" label="Feb"></option>
+                            <option value="3" label="Mar"></option>
+                            <option value="4" label="Apr"></option>
+                            <option value="5" label="May"></option>
+                            <option value="6" label="Jun"></option>
+                            <option value="7" label="Jul"></option>
+                            <option value="8" label="Aug"></option>
+                            <option value="9" label="Sep"></option>
+                            <option value="10" label="Oct"></option>
+                            <option value="11" label="Nov"></option>
+                            <option value="12" label="Dec"></option>
+                    </datalist>
+
+                </div>
+                
+                <button onclick="increaseYear()">&#8680 <br> Next Year</button>
+            </div>
+
+    </div>
+
+    <div id="eventInformation">
+        <h2>Observations:</h2>
+        <p id="EventDescription"></p>
+    </div>
+
+
+    </div>
+
+    <div id="InstructionsDiv">
+
+        <div>
+            <h2 style="margin-top: 0;">Que mostra aquest gràfic?</h2>
+
+            <p>
+
+                The plot shows how bookings have changed between a hotel in a city (City Hotel) and another one in a resort (Resort Hotel)
+                from July 2015 to August 2017.
+            </p>
+
+            <p>Y-axis shows the ammount of bookings.</p>
+
+            <p>X-axis shows the 20 countries with most bookings.</p>
+
+            <h2>How can I navegate through the plot?</h2>
+
+            <p>
+                Use the slider under the plot to change of month and the bottons at the extremes to decrease or increase a year.
+            </p>
+
+            <p>
+                For each month there will be an observation made at the right panel.
+            </p>
+
+            <h2>Where does the data come from?</h2>
+
+            <p>
+                Data comes from the article: "<a href="https://www.sciencedirect.com/science/article/pii/S2352340918315191?via%3Dihub">Hotel booking demand datasets</a>"
+                written by Nuno Antonio, Ana de Almeida i Luis Nunes.
+
+                Additionally, they dataset has been complemented with information from the following website <a href="https://villaferia.com/2020/02/22/2010-2019-40-important-dates-in-portugal/">2010-2019: 40 important dates in Portugal</a>
+                which lists the major events in portugal between 2010 and 2019.
+
+                Finally, the wikipedia page for the terrorist attack on france on November 2015 has been consulted.
+            </p>
+
+        </div>
+
+        <button onclick="showInstructions()">Close</button>
+    </div>
+
+</body>
+</html>
