@@ -1,0 +1,195 @@
+---
+title: "PAC3"
+author: "Òscar Casals"
+date: "2025-12-23"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Load packages
+
+```{r packages}
+library("ggmosaic")
+library("ggplot2")
+library("fitdistrplus")
+library("MASS")
+library("survival")
+library("ggstatsplot")
+library("tidyverse")
+library("purrr")
+```
+
+
+## Data loading and dimensions (N x M)
+
+We read the dataset in CSV format, with 119,390 rows y 32 columns:
+
+```{r load data}
+x=read.csv("hotel_bookings.csv", stringsAsFactors = T)
+dim(x)
+```
+
+## Data cleansing
+
+```{r summary, echo=FALSE}
+summary(x)
+```
+
+Es veu que:
+
+- Hi ha un màxim de 55 adults.
+- Un máxim de 10 nens.
+- Un máxim de 10 bebes.
+- Variables negatives al average daily rate o molt altes.
+
+
+Observant els següents gràfics es pot veure que els valors alts son outliers i per tant es poden eliminar.
+
+```{r plot_adults}
+plot(sort(x$adults))
+grid()
+```
+
+
+```{r clean_child}
+plot(sort(x$children))
+grid()
+```
+
+``` {r filter children}
+x = x[x$children < 5,]
+```
+
+```{r clean_babies}
+plot(sort(x$babies))
+grid()
+
+```
+
+```{r filter_babies}
+x = x[x$babies < 5,]
+```
+
+A l'average daily rate es veu que només una variable és significativament més alta que la resta, per tant es tracta com a outliyer i s'elimina.
+
+```{r plot_adr}
+plot(sort(x$adr))
+grid()
+```
+
+```{r clean_adr}
+x=x[x$adr>=0 & x$adr<1000,]
+```
+
+Al histograma següent es veu que hi ha aproximadament 2000 variables que son 0 y un warning de que hi a NA presents, degut a això s'eliminaran
+els registres NA i amb 0 dies d'estada.
+
+```{r}
+ggplot(data=x, aes(x=adr)) + 
+  geom_histogram(bins=55, colour="black", fill = "lightgray") +
+  ggtitle("Average daily rates") + xlab("average daily rate") +
+  theme_light() 
+```
+```{r}
+x[is.na(x$children),'children']=0
+x=x[x$adr>0 & 
+    (x$stays_in_week_nights+x$stays_in_weekend_nights)>0 & 
+    (x$adults+x$children+x$babies)>0 & 
+    !is.na(x$children),]
+```
+
+
+## Variables categoriques
+
+La pregunta que volem respondre és com han evolucionat al llarg dels mesos i anys el nombre de reserves fetes per cada país.
+
+Per tant treurem les reserves cancel·lades del dataset i filtrarem per cada any els països amb 50 reserves o més, degut a que hi ha molts amb 1 o 2 només.
+
+
+```{r}
+
+create_grouped_dataframe_non_cancelled <- function(year){
+  
+  df <- x %>% 
+  filter(
+    (arrival_date_year == year) &
+      (is_canceled == 0) & 
+      (country != "NULL")
+  ) %>% 
+  group_by(
+    arrival_date_month,
+    #hotel,
+    country
+  ) %>%
+  summarise(
+    city_bookings = sum(hotel == "City Hotel"),
+    resort_bookings = sum(hotel == "Resort Hotel")
+    ) 
+  
+  df = df %>% filter((city_bookings + resort_bookings) >= 100)
+  
+  return(df)
+
+}
+
+
+group_by_month_resort_c <- function(c_df){
+  df <- c_df %>% group_by(arrival_date_month) %>% 
+    summarise(city_bookings = sum(city_bookings), resort_bookings = sum(resort_bookings)) %>% 
+    ungroup() %>% 
+    mutate(arrival_date_month = factor(arrival_date_month, levels = month.name)) %>%
+    arrange(arrival_date_month)
+  
+  return(df)
+}
+
+```
+
+```{r}
+number_reserves_non_cancelled_2015 <- create_grouped_dataframe_non_cancelled("2015") %>% 
+  arrange(desc(city_bookings + resort_bookings))
+
+number_reserves_non_cancelled_2016 <- create_grouped_dataframe_non_cancelled("2016") %>% 
+  arrange(desc(city_bookings + resort_bookings))
+
+number_reserves_non_cancelled_2017 <- create_grouped_dataframe_non_cancelled("2017") %>% 
+  arrange(desc(city_bookings + resort_bookings))
+
+#write.csv(number_reserves_non_cancelled_2015, row.names = FALSE, file = "Non_Cancelled_bookings_2015.csv")
+#write.csv(number_reserves_non_cancelled_2016, row.names = FALSE, file = "Non_Cancelled_bookings_2016.csv")
+#write.csv(number_reserves_non_cancelled_2017, row.names = FALSE, file = "Non_Cancelled_bookings_2017.csv")
+
+```
+
+Finalment per fer-nos una idea dels resultats que esperar, es mirarà una lineplot del nombre de registres per mes per cada any.
+
+```{r}
+
+n2015 <- group_by_month_resort_c(number_reserves_non_cancelled_2015)
+
+ggplot(data = n2015) + 
+  geom_line(aes(x = arrival_date_month, y = city_bookings, group = 1, colour = "city")) + 
+  geom_line(aes(x = arrival_date_month, y = resort_bookings, group = 2, colour="resort")) + 
+  ylim(0, 2500)
+
+n2016 <- group_by_month_resort_c(number_reserves_non_cancelled_2016)
+
+ggplot(data = n2016) + 
+  geom_line(aes(x = arrival_date_month, y = city_bookings, group = 1, colour = "city")) + 
+  geom_line(aes(x = arrival_date_month, y = resort_bookings, group = 2, colour="resort")) + 
+  ylim(0, 2500)
+
+n2017 <- group_by_month_resort_c(number_reserves_non_cancelled_2017)
+
+ggplot(data = n2017) + 
+  geom_line(aes(x = arrival_date_month, y = city_bookings, group = 1, colour = "city")) + 
+  geom_line(aes(x = arrival_date_month, y = resort_bookings, group = 2, colour="resort")) + 
+  ylim(0, 2500)
+```
+
+
+
