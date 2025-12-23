@@ -47,9 +47,9 @@ window.onload = async function(){
     // Selecting month to first display in plot
     let trace1 = {
 
-        x: month['2015']["July"]["country"].slice(0, 20),
+        x: month['2015']["July"]["country"].slice(0, 4),
 
-        y: month['2015']["July"]["city"].slice(0, 20),
+        y: month['2015']["July"]["city"].slice(0, 4),
 
         name: "City Hotel",
 
@@ -60,9 +60,9 @@ window.onload = async function(){
 
     let trace2 = {
 
-        x: month['2015']["July"]["country"].slice(0, 20),
+        x: month['2015']["July"]["country"].slice(0, 4),
 
-        y: month['2015']["July"]["resort"].slice(0, 20),
+        y: month['2015']["July"]["resort"].slice(0, 4),
 
         name: "Resort Hotel",
 

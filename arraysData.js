@@ -102,7 +102,7 @@ let layout = {barmode: 'group',
 
         xaxis: {
             title: {
-                text: 'Top 20 countries with more reservations'
+                text: 'Top 4 countries with more reservations'
             }
         }
 
